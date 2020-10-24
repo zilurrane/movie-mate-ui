@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhost:9000/api/';
+export const API_URL = 'https://movie-mate-api.herokuapp.com/';
