@@ -1,1 +1,21 @@
 @import '~antd/dist/antd.css';
+
+.header {
+  background-color: #555;
+}
+
+.header h1 {
+  color: #FFF;
+}
+
+.movie-container {
+  margin: 15px;
+}
+
+.movie-meta {
+  margin: 2px;
+}
+
+.movie-layout {
+  min-height: 100vh;
+}
