@@ -1,11 +1,13 @@
 import { Button } from 'antd';
+import { Fragment } from 'react';
 import './App.css';
+import MovieListPage from './containers/MovieList';
 
 function App() {
   return (
-    <div className="App">
-      <Button type="primary">Button</Button>
-    </div>
+    <Fragment>
+      <MovieListPage />
+    </Fragment>
   );
 }
 
