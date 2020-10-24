@@ -1,8 +1,9 @@
 import { List, Card } from 'antd';
 import { convertStringArrayToCsv } from '../../shared/utility';
 
-const MovieCardList = ({ data }) => {
+const MovieCardList = ({ data, isLoadingMovies }) => {
     return <List
+        loading={isLoadingMovies}
         grid={{
             gutter: 16,
             xs: 1,

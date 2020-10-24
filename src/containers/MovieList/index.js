@@ -19,7 +19,8 @@ class MovieListPage extends PureComponent {
         isMovieFetchFailed: false,
         page: 1,
         limit: 6,
-        totalCount: 0
+        totalCount: 0,
+        isLoadingMovies: false,
     }
 
     componentDidMount() {
@@ -27,7 +28,7 @@ class MovieListPage extends PureComponent {
     }
 
     handlePageChange(page, pageSize) {
-        this.setState({ page, limit: pageSize }, this.getMovieList);
+        this.setState({ page, limit: pageSize, isLoadingMovies: true }, this.getMovieList);
     }
 
     async getMovieList() {
@@ -35,21 +36,21 @@ class MovieListPage extends PureComponent {
             const { page, limit } = this.state;
             const response = await getMovieList(page - 1, limit);
             if (response && response.data) {
-                this.setState({ data: response.data, totalCount: response.totalCount, isMovieFetchFailed: false });
+                this.setState({ data: response.data, totalCount: response.totalCount, isMovieFetchFailed: false, isLoadingMovies: false });
             }
         } catch {
-            this.setState({ data: [], isMovieFetchFailed: true });
+            this.setState({ data: [], isMovieFetchFailed: true, isLoadingMovies: false });
         }
     }
 
     render() {
-        const { data, totalCount, page, limit } = this.state;
+        const { data, totalCount, page, limit, isLoadingMovies } = this.state;
         return <Layout className="movie-layout">
             <Header />
             <Content className="movie-container">
                 <Row justify="center">
                     <Col span={18}>
-                        <MovieCardList data={data} />
+                        <MovieCardList data={data} isLoadingMovies={isLoadingMovies} />
                     </Col>
                 </Row>
                 <Row justify="center">
