@@ -32,3 +32,8 @@
 .search-action {
   margin: 10px 0;
 }
+
+.genre-title {
+  line-height: 32px;
+  margin-left: 10px;
+}
