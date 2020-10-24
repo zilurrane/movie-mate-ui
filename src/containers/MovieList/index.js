@@ -86,10 +86,12 @@ class MovieListPage extends PureComponent {
                                 <MovieSearchInput onSearch={this.onSearch} onChange={this.onSearchQueryChange} />
                             </Col>
                         </Row>
-                        <Row>
+                        <Row className="search-action">
                             <Col>
                                 <MovieSortSelect onSortSelection={this.onSortSelection} sort={sort} />
                             </Col>
+                        </Row>
+                        <Row className="search-action">
                             <Col>
                                 <MovieGenreTagSelect selectedTags={genreList} onChange={this.onGenreTagChange} />
                             </Col>
