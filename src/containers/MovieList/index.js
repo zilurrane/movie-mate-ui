@@ -4,8 +4,9 @@ import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
 import { getMovieList } from "../../shared/service";
-import { DEFAULT_SORT } from "../../shared/constants";
+import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shared/constants";
 import MovieSortSelect from "./MovieSortSelect";
+import MovieSearchInput from "./MovieSearchInput";
 
 const { Content } = Layout;
 
@@ -15,16 +16,19 @@ class MovieListPage extends PureComponent {
         super();
         this.onPageChange = this.handlePageChange.bind(this);
         this.onSortSelection = this.handleSortSelection.bind(this);
+        this.onSearch = this.handleSearch.bind(this);
+        this.onSearchQueryChange = this.handleSearchQueryChange.bind(this);
     }
 
     state = {
         data: [],
         isMovieFetchFailed: false,
-        page: 1,
-        limit: 12,
+        page: DEFAULT_PAGE_NUMBER,
+        limit: DEFAULT_PAGE_SIZE,
         totalCount: 0,
         isLoadingMovies: false,
-        sort: DEFAULT_SORT
+        sort: DEFAULT_SORT,
+        query: ''
     }
 
     componentDidMount() {
@@ -39,11 +43,20 @@ class MovieListPage extends PureComponent {
         this.setState({ sort, isLoadingMovies: true }, this.getMovieList);
     }
 
+    handleSearchQueryChange(event) {
+        const query = event.target.value;
+        this.setState({ query })
+    }
+
+    handleSearch() {
+        this.setState({ page: DEFAULT_PAGE_NUMBER, limit: DEFAULT_PAGE_SIZE, isLoadingMovies: true }, this.getMovieList);
+    }
+
     async getMovieList() {
         try {
-            const { page, limit, sort } = this.state;
+            const { page, limit, sort, query } = this.state;
             const sortData = sort.split("-");
-            const response = await getMovieList(page - 1, limit, sortData[0], sortData[1]);
+            const response = await getMovieList(page - 1, limit, sortData[0], sortData[1], query);
             if (response && response.data) {
                 this.setState({ data: response.data, totalCount: response.totalCount, isMovieFetchFailed: false, isLoadingMovies: false });
             }
@@ -59,7 +72,12 @@ class MovieListPage extends PureComponent {
             <Content className="movie-container">
                 <Row justify="center" className="movie-list-actions">
                     <Col span={18}>
-                        <Row justify="end">
+                        <Row justify="end" className="search-action">
+                            <Col span={24}>
+                                <MovieSearchInput onSearch={this.onSearch} onChange={this.onSearchQueryChange} />
+                            </Col>
+                        </Row>
+                        <Row justify="start">
                             <Col>
                                 <MovieSortSelect onSortSelection={this.onSortSelection} sort={sort} />
                             </Col>

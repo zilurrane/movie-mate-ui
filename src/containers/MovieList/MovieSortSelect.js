@@ -1,4 +1,3 @@
-import { List, Card } from 'antd';
 import { Fragment } from 'react';
 import { Select } from 'antd';
 import { SORT_OPTIONS } from '../../shared/constants';
