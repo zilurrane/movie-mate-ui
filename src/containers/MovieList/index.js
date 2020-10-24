@@ -62,6 +62,8 @@ class MovieListPage extends PureComponent {
                             <Col>
                                 <b>Sort By: </b>
                                 <Select
+                                    listItemHeight={30}
+                                    listHeight={270} 
                                     defaultValue={sort}
                                     style={{ width: 200 }}
                                     options={SORT_OPTIONS}

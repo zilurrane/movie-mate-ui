@@ -1,8 +1,12 @@
-import { Layout } from 'antd';
+import { Col, Layout, Row } from 'antd';
 
 function Footer() {
     return <Layout.Footer>
-        Made with &#128150; in India
+        <Row justify="center">
+            <Col>
+                Made with &#128150; in India
+            </Col>
+        </Row>
     </Layout.Footer>
 }
 
