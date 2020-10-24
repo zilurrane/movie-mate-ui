@@ -1,4 +1,3 @@
-import { Button } from 'antd';
 import { Fragment } from 'react';
 import './App.css';
 import MovieListPage from './containers/MovieList';
