@@ -1,10 +1,11 @@
 import { PureComponent } from "react";
-import { Layout, Col, Row, Pagination, Select } from 'antd';
+import { Layout, Col, Row, Pagination } from 'antd';
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
 import { getMovieList } from "../../shared/service";
-import { DEFAULT_SORT, SORT_OPTIONS } from "../../shared/constants";
+import { DEFAULT_SORT } from "../../shared/constants";
+import MovieSortSelect from "./MovieSortSelect";
 
 const { Content } = Layout;
 
@@ -60,16 +61,7 @@ class MovieListPage extends PureComponent {
                     <Col span={18}>
                         <Row justify="end">
                             <Col>
-                                <b>Sort By: </b>
-                                <Select
-                                    listItemHeight={30}
-                                    listHeight={270} 
-                                    defaultValue={sort}
-                                    style={{ width: 200 }}
-                                    options={SORT_OPTIONS}
-                                    onSelect={this.onSortSelection}
-                                >
-                                </Select>
+                                <MovieSortSelect onSortSelection={this.onSortSelection} sort={sort} />
                             </Col>
                         </Row>
                     </Col>
