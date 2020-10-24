@@ -15,7 +15,7 @@ const MovieCardList = ({ data }) => {
         dataSource={data}
         renderItem={item => (
             <List.Item>
-                <Card title={item.name}>
+                <Card title={item.name} className="movie-card-body">
                     <div className="movie-meta">
                         <b>Director: </b>
                         {item.director}

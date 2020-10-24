@@ -19,3 +19,8 @@
 .movie-layout {
   min-height: 100vh;
 }
+
+.movie-card-body .ant-card-body {
+  height: 166px;
+  overflow: auto;
+}

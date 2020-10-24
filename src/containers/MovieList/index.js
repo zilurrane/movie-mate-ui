@@ -1,5 +1,5 @@
 import { PureComponent } from "react";
-import { Layout, Col, Row } from 'antd';
+import { Layout, Col, Row, Pagination } from 'antd';
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
@@ -9,23 +9,33 @@ const { Content } = Layout;
 
 class MovieListPage extends PureComponent {
 
+    constructor() {
+        super();
+        this.onPageChange = this.handlePageChange.bind(this);
+    }
+
     state = {
         data: [],
         isMovieFetchFailed: false,
-        page: 0,
-        limit: 6
+        page: 1,
+        limit: 6,
+        totalCount: 0
     }
 
     componentDidMount() {
         this.getMovieList();
     }
 
+    handlePageChange(page, pageSize) {
+        this.setState({ page, limit: pageSize }, this.getMovieList);
+    }
+
     async getMovieList() {
         try {
             const { page, limit } = this.state;
-            const response = await getMovieList(page, limit);
+            const response = await getMovieList(page - 1, limit);
             if (response && response.data) {
-                this.setState({ data: response.data, isMovieFetchFailed: false });
+                this.setState({ data: response.data, totalCount: response.totalCount, isMovieFetchFailed: false });
             }
         } catch {
             this.setState({ data: [], isMovieFetchFailed: true });
@@ -33,7 +43,7 @@ class MovieListPage extends PureComponent {
     }
 
     render() {
-        const { data } = this.state;
+        const { data, totalCount, page, limit } = this.state;
         return <Layout className="movie-layout">
             <Header />
             <Content className="movie-container">
@@ -41,6 +51,18 @@ class MovieListPage extends PureComponent {
                     <Col span={18}>
                         <MovieCardList data={data} />
                     </Col>
+                </Row>
+                <Row justify="center">
+                    <Pagination
+                        hideOnSinglePage
+                        defaultCurrent={1}
+                        current={page}
+                        defaultPageSize={limit}
+                        showSizeChanger={false}
+                        total={totalCount}
+                        onChange={this.onPageChange}
+                        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} movies`}
+                    />
                 </Row>
             </Content>
             <Footer />
