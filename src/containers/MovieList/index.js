@@ -1,9 +1,10 @@
 import { PureComponent } from "react";
-import { Layout, Col, Row, Pagination } from 'antd';
+import { Layout, Col, Row, Pagination, Select } from 'antd';
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
 import { getMovieList } from "../../shared/service";
+import { DEFAULT_SORT, SORT_OPTIONS } from "../../shared/constants";
 
 const { Content } = Layout;
 
@@ -12,15 +13,17 @@ class MovieListPage extends PureComponent {
     constructor() {
         super();
         this.onPageChange = this.handlePageChange.bind(this);
+        this.onSortSelection = this.handleSortSelection.bind(this);
     }
 
     state = {
         data: [],
         isMovieFetchFailed: false,
         page: 1,
-        limit: 6,
+        limit: 12,
         totalCount: 0,
         isLoadingMovies: false,
+        sort: DEFAULT_SORT
     }
 
     componentDidMount() {
@@ -31,10 +34,15 @@ class MovieListPage extends PureComponent {
         this.setState({ page, limit: pageSize, isLoadingMovies: true }, this.getMovieList);
     }
 
+    handleSortSelection(sort) {
+        this.setState({ sort, isLoadingMovies: true }, this.getMovieList);
+    }
+
     async getMovieList() {
         try {
-            const { page, limit } = this.state;
-            const response = await getMovieList(page - 1, limit);
+            const { page, limit, sort } = this.state;
+            const sortData = sort.split("-");
+            const response = await getMovieList(page - 1, limit, sortData[0], sortData[1]);
             if (response && response.data) {
                 this.setState({ data: response.data, totalCount: response.totalCount, isMovieFetchFailed: false, isLoadingMovies: false });
             }
@@ -44,10 +52,26 @@ class MovieListPage extends PureComponent {
     }
 
     render() {
-        const { data, totalCount, page, limit, isLoadingMovies } = this.state;
+        const { data, totalCount, page, limit, isLoadingMovies, sort } = this.state;
         return <Layout className="movie-layout">
             <Header />
             <Content className="movie-container">
+                <Row justify="center" className="movie-list-actions">
+                    <Col span={18}>
+                        <Row justify="end">
+                            <Col>
+                                <b>Sort By: </b>
+                                <Select
+                                    defaultValue={sort}
+                                    style={{ width: 200 }}
+                                    options={SORT_OPTIONS}
+                                    onSelect={this.onSortSelection}
+                                >
+                                </Select>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
                 <Row justify="center">
                     <Col span={18}>
                         <MovieCardList data={data} isLoadingMovies={isLoadingMovies} />

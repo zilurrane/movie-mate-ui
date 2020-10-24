@@ -24,3 +24,7 @@
   height: 166px;
   overflow: auto;
 }
+
+.movie-list-actions {
+  margin: 10px 0;
+}
