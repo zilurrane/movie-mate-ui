@@ -3,7 +3,7 @@ import { Layout, Col, Row, Pagination, Modal, notification, Button } from 'antd'
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
-import { addMovie, deleteMovie, getGenreList, getMovieList } from "../../shared/service";
+import { addMovie, deleteMovie, getGenreList, getMovieList, editMovie } from "../../shared/service";
 import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shared/constants";
 import MovieSortSelect from "./MovieSortSelect";
 import MovieSearchInput from "./MovieSearchInput";
@@ -42,7 +42,8 @@ class MovieListPage extends PureComponent {
         genreList: [],
         isAddEditMovieModalVisible: false,
         isEditMovieView: false,
-        allGenreList: []
+        allGenreList: [],
+        selectedMovie: {}
     }
 
     componentDidMount() {
@@ -77,6 +78,11 @@ class MovieListPage extends PureComponent {
 
     handleSearch() {
         this.setState({ page: DEFAULT_PAGE_NUMBER, limit: DEFAULT_PAGE_SIZE, isLoadingMovies: true }, this.getMovieList);
+    }
+
+    onAddEditSuccess() {
+        this.handleSearch();
+        this.getAllGenreList();
     }
 
     handleGenreTagChange(genre, checked) {
@@ -126,9 +132,32 @@ class MovieListPage extends PureComponent {
 
     handleAddEditMovieFormSubmit(values, callBack) {
         try {
-            const { isEditMovieView } = this.state;
+            const { isEditMovieView, selectedMovie } = this.state;
             if (isEditMovieView) {
 
+                const updateRequest = {
+                    genre: values.genre,
+                    popularity99: values.popularity99,
+                    director: values.director,
+                    imdb_score: values.imdb_score
+                }
+                editMovie(selectedMovie._id, updateRequest).then(async response => {
+                    if (response.ok) {
+                        notification.success({
+                            message: 'Success',
+                            description: 'Movie has been updated successfully.'
+                        });
+                        if (callBack) {
+                            callBack();
+                            this.setState({ isAddEditMovieModalVisible: false, selectedMovie: {} }, this.onAddEditSuccess);
+                        }
+                    } else {
+                        const data = await response.json().then();
+                        this.processApiCallFailure(data);
+                    }
+                }).catch(error => {
+                    this.processApiCallFailure(error);
+                });
             } else {
                 addMovie(values).then(async response => {
                     if (response.ok) {
@@ -138,7 +167,7 @@ class MovieListPage extends PureComponent {
                         });
                         if (callBack) {
                             callBack();
-                            this.setState({ isAddEditMovieModalVisible: false }, this.handleSearch);
+                            this.setState({ isAddEditMovieModalVisible: false, selectedMovie: {} }, this.onAddEditSuccess);
                         }
                     } else {
                         const data = await response.json().then();
@@ -155,14 +184,15 @@ class MovieListPage extends PureComponent {
 
     handleMovieEdit(movie) {
         console.log(movie);
+        this.setState({ isAddEditMovieModalVisible: true, isEditMovieView: true, selectedMovie: movie });
     }
 
     handleAddModalOpen() {
-        this.setState({ isAddEditMovieModalVisible: true, isEditMovieView: false });
+        this.setState({ isAddEditMovieModalVisible: true, isEditMovieView: false, selectedMovie: {} });
     }
 
     handleAddModalClose() {
-        this.setState({ isAddEditMovieModalVisible: false });
+        this.setState({ isAddEditMovieModalVisible: false, selectedMovie: {} });
     }
 
     async getMovieList() {
@@ -179,7 +209,7 @@ class MovieListPage extends PureComponent {
     }
 
     render() {
-        const { data, totalCount, page, limit, isLoadingMovies, sort, genreList, isAddEditMovieModalVisible, isEditMovieView, allGenreList } = this.state;
+        const { data, totalCount, page, limit, isLoadingMovies, sort, genreList, isAddEditMovieModalVisible, isEditMovieView, allGenreList, selectedMovie } = this.state;
         const { isAdminRoute } = this.props;
         return <Layout className="movie-layout">
             <Header />
@@ -213,6 +243,7 @@ class MovieListPage extends PureComponent {
                                         handleCancel={this.closeAddMovieModal}
                                         handleOk={this.onAddEditMovieFormSubmit}
                                         allGenreList={allGenreList}
+                                        selectedMovie={selectedMovie}
                                     />
                                 </Col>
                             </Row>

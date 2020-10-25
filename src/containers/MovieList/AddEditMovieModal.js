@@ -1,9 +1,14 @@
 import { Input, Form, Modal, Select, InputNumber } from 'antd';
+import { useEffect } from 'react';
 
 const { Option } = Select;
 
-const AddEditMovieModal = ({ isEditMovieView, visible, handleOk, handleCancel, allGenreList }) => {
+const AddEditMovieModal = ({ isEditMovieView, visible, handleOk, handleCancel, allGenreList, selectedMovie }) => {
     const [form] = Form.useForm();
+    useEffect(() => {
+        form.setFieldsValue(selectedMovie)
+    }, [form, selectedMovie]);
+
     return (<Modal
         visible={visible}
         title={isEditMovieView ? "Update Movie" : "Add Movie"}
@@ -26,6 +31,7 @@ const AddEditMovieModal = ({ isEditMovieView, visible, handleOk, handleCancel, a
             form={form}
             layout="vertical"
             name="add_edit_movie_modal"
+            initialValues={selectedMovie}
         >
             <Form.Item
                 name="name"
