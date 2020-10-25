@@ -11,7 +11,7 @@
   font-size: 24px;
 }
 
-.header .user-login a {
+.header .user-login, .header .user-login a {
   color: #FFF;
   font-size: 16px;
 }

@@ -2,7 +2,7 @@ import { PureComponent } from 'react';
 import { Card, Alert } from 'antd';
 import LogInForm from './LogInForm';
 import { login } from '../../shared/service';
-import { storeAuthToken, storeLoggedInUserInfo } from '../../shared/storage-helper';
+import { logOutUser, storeAuthToken, storeLoggedInUserInfo } from '../../shared/storage-helper';
 
 class LogInPage extends PureComponent {
 
@@ -13,6 +13,10 @@ class LogInPage extends PureComponent {
     constructor() {
         super();
         this.onFormSubmit = this.handleFormSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        logOutUser();
     }
 
     processLoginSucess(userResponse) {
