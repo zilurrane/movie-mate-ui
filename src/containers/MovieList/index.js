@@ -1,5 +1,5 @@
 import { PureComponent } from "react";
-import { Layout, Col, Row, Pagination, Modal, notification } from 'antd';
+import { Layout, Col, Row, Pagination, Modal, notification, Button } from 'antd';
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
@@ -8,7 +8,8 @@ import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shar
 import MovieSortSelect from "./MovieSortSelect";
 import MovieSearchInput from "./MovieSearchInput";
 import MovieGenreTagSelect from "./MovieGenreTagSelect";
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import AddEditMovieModal from "./AddEditMovieModal";
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -24,6 +25,8 @@ class MovieListPage extends PureComponent {
         this.onGenreTagChange = this.handleGenreTagChange.bind(this);
         this.onMovieDelete = this.handleMovieDelete.bind(this);
         this.onMovieEdit = this.handleMovieEdit.bind(this);
+        this.openAddMovieModal = this.handleAddModalOpen.bind(this);
+        this.closeAddMovieModal = this.handleAddModalClose.bind(this);
     }
 
     state = {
@@ -35,7 +38,8 @@ class MovieListPage extends PureComponent {
         isLoadingMovies: false,
         sort: DEFAULT_SORT,
         query: '',
-        genreList: []
+        genreList: [],
+        isAddEditMovieModalVisible: false
     }
 
     componentDidMount() {
@@ -108,6 +112,14 @@ class MovieListPage extends PureComponent {
         console.log(movie);
     }
 
+    handleAddModalOpen() {
+        this.setState({ isAddEditMovieModalVisible: true });
+    }
+
+    handleAddModalClose() {
+        this.setState({ isAddEditMovieModalVisible: false });
+    }
+
     async getMovieList() {
         try {
             const { page, limit, sort, query, genreList } = this.state;
@@ -122,7 +134,7 @@ class MovieListPage extends PureComponent {
     }
 
     render() {
-        const { data, totalCount, page, limit, isLoadingMovies, sort, genreList } = this.state;
+        const { data, totalCount, page, limit, isLoadingMovies, sort, genreList, isAddEditMovieModalVisible } = this.state;
         const { isAdminRoute } = this.props;
         return <Layout className="movie-layout">
             <Header />
@@ -144,6 +156,16 @@ class MovieListPage extends PureComponent {
                                 <MovieGenreTagSelect selectedTags={genreList} onChange={this.onGenreTagChange} />
                             </Col>
                         </Row>
+                        {
+                            isAdminRoute && <Row justify="end" className="search-action">
+                                <Col>
+                                    <Button onClick={this.openAddMovieModal} type="primary" icon={<PlusOutlined />}>
+                                        Add Movie
+                                    </Button>
+                                    <AddEditMovieModal visible={isAddEditMovieModalVisible} handleCancel={this.closeAddMovieModal} />
+                                </Col>
+                            </Row>
+                        }
                     </Col>
                 </Row>
                 <Row justify="center">
