@@ -24,7 +24,7 @@ const LogInForm = ({ onFormSubmit }) => {
                     placeholder="Password"
                 />
             </Form.Item>
-            <Form.Item>
+            <Form.Item className="submit-button">
                 <Button block type="primary" htmlType="submit">
                     Sign in
                 </Button>
