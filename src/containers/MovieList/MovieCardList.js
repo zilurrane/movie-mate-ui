@@ -1,7 +1,8 @@
-import { List, Card } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { List, Card, Button } from 'antd';
 import { convertStringArrayToCsv } from '../../shared/utility';
 
-const MovieCardList = ({ data, isLoadingMovies }) => {
+const MovieCardList = ({ isAdminRoute, data, isLoadingMovies, onMovieDelete, onMovieEdit }) => {
     return <List
         loading={isLoadingMovies}
         grid={{
@@ -16,7 +17,14 @@ const MovieCardList = ({ data, isLoadingMovies }) => {
         dataSource={data}
         renderItem={item => (
             <List.Item>
-                <Card title={item.name} className="movie-card-body">
+                <Card
+                    title={item.name}
+                    className="movie-card-body"
+                    actions={isAdminRoute ? [
+                        <Button type="text" onClick={() => onMovieEdit(item)}><EditOutlined key="edit" /></Button>,
+                        <Button type="text" onClick={() => onMovieDelete(item)}><DeleteOutlined key="delete" /></Button>,
+                    ] : []}
+                >
                     <div className="movie-meta">
                         <b>Director: </b>
                         {item.director}

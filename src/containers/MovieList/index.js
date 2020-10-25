@@ -1,15 +1,17 @@
 import { PureComponent } from "react";
-import { Layout, Col, Row, Pagination } from 'antd';
+import { Layout, Col, Row, Pagination, Modal, notification } from 'antd';
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
-import { getMovieList } from "../../shared/service";
+import { deleteMovie, getMovieList } from "../../shared/service";
 import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shared/constants";
 import MovieSortSelect from "./MovieSortSelect";
 import MovieSearchInput from "./MovieSearchInput";
 import MovieGenreTagSelect from "./MovieGenreTagSelect";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
+const { confirm } = Modal;
 
 class MovieListPage extends PureComponent {
 
@@ -20,6 +22,8 @@ class MovieListPage extends PureComponent {
         this.onSearch = this.handleSearch.bind(this);
         this.onSearchQueryChange = this.handleSearchQueryChange.bind(this);
         this.onGenreTagChange = this.handleGenreTagChange.bind(this);
+        this.onMovieDelete = this.handleMovieDelete.bind(this);
+        this.onMovieEdit = this.handleMovieEdit.bind(this);
     }
 
     state = {
@@ -61,6 +65,49 @@ class MovieListPage extends PureComponent {
         this.setState({ genreList: nextGenreList, page: DEFAULT_PAGE_NUMBER, limit: DEFAULT_PAGE_SIZE, isLoadingMovies: true }, this.getMovieList);
     }
 
+    processApiCallFailure(error) {
+        const errorMessage = error?.error?.message || 'We are unable to process your request, please try again later.';
+        notification.error({
+            message: 'Error',
+            description: errorMessage
+        });
+    }
+
+    handleMovieDelete(movie) {
+        try {
+            confirm({
+                title: 'Are you sure delete this movie?',
+                icon: <ExclamationCircleOutlined />,
+                content: movie.name,
+                okText: 'Yes',
+                okType: 'danger',
+                cancelText: 'No',
+                onOk: () => {
+                    deleteMovie(movie._id).then(async response => {
+                        if (response.ok) {
+                            notification.success({
+                                message: 'Success',
+                                description: 'Selected movie has been deleted successfully.'
+                            });
+                            this.handleSearch();
+                        } else {
+                            const data = await response.json().then();
+                            this.processApiCallFailure(data);
+                        }
+                    }).catch(error => {
+                        this.processApiCallFailure(error);
+                    });
+                }
+            });
+        } catch (error) {
+            this.processApiCallFailure(error);
+        }
+    }
+
+    handleMovieEdit(movie) {
+        console.log(movie);
+    }
+
     async getMovieList() {
         try {
             const { page, limit, sort, query, genreList } = this.state;
@@ -76,6 +123,7 @@ class MovieListPage extends PureComponent {
 
     render() {
         const { data, totalCount, page, limit, isLoadingMovies, sort, genreList } = this.state;
+        const { isAdminRoute } = this.props;
         return <Layout className="movie-layout">
             <Header />
             <Content className="movie-container">
@@ -100,7 +148,7 @@ class MovieListPage extends PureComponent {
                 </Row>
                 <Row justify="center">
                     <Col span={18}>
-                        <MovieCardList data={data} isLoadingMovies={isLoadingMovies} />
+                        <MovieCardList isAdminRoute={isAdminRoute} data={data} isLoadingMovies={isLoadingMovies} onMovieEdit={this.onMovieEdit} onMovieDelete={this.onMovieDelete} />
                     </Col>
                 </Row>
                 <Row justify="center">
