@@ -1,19 +1,15 @@
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-const LogInForm = () => {
-    const onFinish = values => {
-        console.log('Received values of form: ', values);
-    };
-
+const LogInForm = ({ onFormSubmit }) => {
     return (
         <Form
             name="login_form"
             className="login-form"
-            onFinish={onFinish}
+            onFinish={onFormSubmit}
         >
             <Form.Item
-                name="username"
+                name="userName"
                 rules={[{ required: true, message: 'Please input your Username!' }]}
             >
                 <Input prefix={<UserOutlined />} placeholder="Username" />
@@ -30,7 +26,7 @@ const LogInForm = () => {
             </Form.Item>
             <Form.Item>
                 <Button block type="primary" htmlType="submit">
-                    Log in
+                    Sign in
                 </Button>
             </Form.Item>
         </Form>

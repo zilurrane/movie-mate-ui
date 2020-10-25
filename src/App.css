@@ -55,8 +55,11 @@
   background-color: #EEE;
 }
 
-.login-container .login-card .login-form {
+.login-container .login-card {
   width: 300px;
+}
+
+.login-container .login-card .login-form {
   margin: 15px;
 }
 
