@@ -3,7 +3,6 @@ import { Card, Alert } from 'antd';
 import LogInForm from './LogInForm';
 import { login } from '../../shared/service';
 import { storeAuthToken, storeLoggedInUserInfo } from '../../shared/storage-helper';
-import { Redirect } from 'react-router-dom';
 
 class LogInPage extends PureComponent {
 
