@@ -15,8 +15,7 @@ const AddEditMovieModal = ({ isEditMovieView, visible, handleOk, handleCancel, a
                 .validateFields()
                 .then(values => {
                     console.log(values);
-                    form.resetFields();
-                    handleOk(values);
+                    handleOk(values, form.resetFields);
                 })
                 .catch(info => {
                     console.log('Validate Failed:', info);
@@ -57,7 +56,7 @@ const AddEditMovieModal = ({ isEditMovieView, visible, handleOk, handleCancel, a
                 label="Popularity"
                 rules={[{ required: true, message: 'Please input the popularity!' }]}
             >
-                <InputNumber className="width-100" min={0} max={99} />
+                <InputNumber className="width-100" min={0} max={99} step={1} precision={0} />
             </Form.Item>
             <Form.Item
                 name="imdb_score"

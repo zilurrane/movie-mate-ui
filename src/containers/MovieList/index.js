@@ -3,7 +3,7 @@ import { Layout, Col, Row, Pagination, Modal, notification, Button } from 'antd'
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
-import { deleteMovie, getGenreList, getMovieList } from "../../shared/service";
+import { addMovie, deleteMovie, getGenreList, getMovieList } from "../../shared/service";
 import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shared/constants";
 import MovieSortSelect from "./MovieSortSelect";
 import MovieSearchInput from "./MovieSearchInput";
@@ -27,6 +27,7 @@ class MovieListPage extends PureComponent {
         this.onMovieEdit = this.handleMovieEdit.bind(this);
         this.openAddMovieModal = this.handleAddModalOpen.bind(this);
         this.closeAddMovieModal = this.handleAddModalClose.bind(this);
+        this.onAddEditMovieFormSubmit = this.handleAddEditMovieFormSubmit.bind(this);
     }
 
     state = {
@@ -123,6 +124,35 @@ class MovieListPage extends PureComponent {
         }
     }
 
+    handleAddEditMovieFormSubmit(values, callBack) {
+        try {
+            const { isEditMovieView } = this.state;
+            if (isEditMovieView) {
+
+            } else {
+                addMovie(values).then(async response => {
+                    if (response.ok) {
+                        notification.success({
+                            message: 'Success',
+                            description: 'Movie has been added successfully.'
+                        });
+                        if (callBack) {
+                            callBack();
+                            this.setState({ isAddEditMovieModalVisible: false }, this.handleSearch);
+                        }
+                    } else {
+                        const data = await response.json().then();
+                        this.processApiCallFailure(data);
+                    }
+                }).catch(error => {
+                    this.processApiCallFailure(error);
+                });
+            }
+        } catch (error) {
+            this.processApiCallFailure(error);
+        }
+    }
+
     handleMovieEdit(movie) {
         console.log(movie);
     }
@@ -181,6 +211,7 @@ class MovieListPage extends PureComponent {
                                         isEditMovieView={isEditMovieView}
                                         visible={isAddEditMovieModalVisible}
                                         handleCancel={this.closeAddMovieModal}
+                                        handleOk={this.onAddEditMovieFormSubmit}
                                         allGenreList={allGenreList}
                                     />
                                 </Col>
