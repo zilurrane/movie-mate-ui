@@ -4,7 +4,7 @@ import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
 import { addMovie, deleteMovie, getGenreList, getMovieList, editMovie } from "../../shared/service";
-import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shared/constants";
+import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, EMPTY_MOVIE } from "../../shared/constants";
 import MovieSortSelect from "./MovieSortSelect";
 import MovieSearchInput from "./MovieSearchInput";
 import MovieGenreTagSelect from "./MovieGenreTagSelect";
@@ -43,7 +43,7 @@ class MovieListPage extends PureComponent {
         isAddEditMovieModalVisible: false,
         isEditMovieView: false,
         allGenreList: [],
-        selectedMovie: {}
+        selectedMovie: EMPTY_MOVIE
     }
 
     componentDidMount() {
@@ -149,7 +149,7 @@ class MovieListPage extends PureComponent {
                         });
                         if (callBack) {
                             callBack();
-                            this.setState({ isAddEditMovieModalVisible: false, selectedMovie: {} }, this.onAddEditSuccess);
+                            this.setState({ isAddEditMovieModalVisible: false, selectedMovie: EMPTY_MOVIE }, this.onAddEditSuccess);
                         }
                     } else {
                         const data = await response.json().then();
@@ -167,7 +167,7 @@ class MovieListPage extends PureComponent {
                         });
                         if (callBack) {
                             callBack();
-                            this.setState({ isAddEditMovieModalVisible: false, selectedMovie: {} }, this.onAddEditSuccess);
+                            this.setState({ isAddEditMovieModalVisible: false, selectedMovie: EMPTY_MOVIE }, this.onAddEditSuccess);
                         }
                     } else {
                         const data = await response.json().then();
@@ -188,11 +188,11 @@ class MovieListPage extends PureComponent {
     }
 
     handleAddModalOpen() {
-        this.setState({ isAddEditMovieModalVisible: true, isEditMovieView: false, selectedMovie: {} });
+        this.setState({ isAddEditMovieModalVisible: true, isEditMovieView: false, selectedMovie: EMPTY_MOVIE });
     }
 
     handleAddModalClose() {
-        this.setState({ isAddEditMovieModalVisible: false, selectedMovie: {} });
+        this.setState({ isAddEditMovieModalVisible: false, selectedMovie: EMPTY_MOVIE });
     }
 
     async getMovieList() {

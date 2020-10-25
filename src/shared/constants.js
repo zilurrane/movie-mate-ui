@@ -33,3 +33,11 @@ export const DEFAULT_SORT = 'popularity99-desc';
 export const DEFAULT_PAGE_NUMBER = 1;
 
 export const DEFAULT_PAGE_SIZE = 12;
+
+export const EMPTY_MOVIE = {
+    genre: [],
+    name: undefined,
+    director: undefined,
+    imdbScore: undefined,
+    popularity99: undefined
+};
