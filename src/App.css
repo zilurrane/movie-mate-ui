@@ -2,10 +2,18 @@
 
 .header {
   background-color: #555;
+  display: flex;
+  justify-content: space-between;
 }
 
-.header h1 {
+.header .title {
   color: #FFF;
+  font-size: 24px;
+}
+
+.header .user-login a {
+  color: #FFF;
+  font-size: 16px;
 }
 
 .movie-container {
