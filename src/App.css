@@ -59,7 +59,8 @@
 }
 
 .login-container .login-card {
-  width: 300px;
+  width: 400px;
+  margin: 20px;
 }
 
 .login-container .login-card .login-form {
