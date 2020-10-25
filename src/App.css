@@ -45,3 +45,22 @@
   border: 1px solid #333;
   margin: 2px;
 }
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #EEE;
+}
+
+.login-container .login-card .login-form {
+  width: 300px;
+  margin: 15px;
+}
+
+.login-container .login-card .title {
+  text-align: center;
+  margin-bottom: 25px;
+}

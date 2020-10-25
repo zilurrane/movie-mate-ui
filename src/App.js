@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
 import './App.css';
-import MovieListPage from './containers/MovieList';
+import Router from './Router';
 
 function App() {
   return (
     <Fragment>
-      <MovieListPage />
+      <Router />
     </Fragment>
   );
 }
