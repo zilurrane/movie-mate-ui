@@ -1,20 +1,10 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import { Tag } from 'antd';
-import { getGenreList } from '../../shared/service';
 const { CheckableTag } = Tag;
 
-const MovieGenreTagSelect = ({ selectedTags, onChange }) => {
-    const [tags, setTags] = useState([]);
-
-    useEffect(() => {
-        getGenreList()
-            .then(data => {
-                setTags(data.map(({ name }) => name));
-            });
-    }, []);
-
+const MovieGenreTagSelect = ({ selectedTags, onChange, allGenreList }) => {
     return <Fragment>
-        {tags.map(tag => (
+        {allGenreList.map(tag => (
             <CheckableTag
                 className="genre-tag"
                 key={tag}

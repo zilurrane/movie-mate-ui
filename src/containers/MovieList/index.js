@@ -3,7 +3,7 @@ import { Layout, Col, Row, Pagination, Modal, notification, Button } from 'antd'
 import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 import MovieCardList from "./MovieCardList";
-import { deleteMovie, getMovieList } from "../../shared/service";
+import { deleteMovie, getGenreList, getMovieList } from "../../shared/service";
 import { DEFAULT_SORT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../shared/constants";
 import MovieSortSelect from "./MovieSortSelect";
 import MovieSearchInput from "./MovieSearchInput";
@@ -39,11 +39,26 @@ class MovieListPage extends PureComponent {
         sort: DEFAULT_SORT,
         query: '',
         genreList: [],
-        isAddEditMovieModalVisible: false
+        isAddEditMovieModalVisible: false,
+        isEditMovieView: false,
+        allGenreList: []
     }
 
     componentDidMount() {
         this.getMovieList();
+        this.getAllGenreList();
+    }
+
+    getAllGenreList() {
+        try {
+            getGenreList()
+                .then(data => {
+                    const allGenreList = data.map(({ name }) => name);
+                    this.setState({ allGenreList });
+                });
+        } catch (_error) {
+            this.setState({ allGenreList: [] });
+        }
     }
 
     handlePageChange(page, pageSize) {
@@ -113,7 +128,7 @@ class MovieListPage extends PureComponent {
     }
 
     handleAddModalOpen() {
-        this.setState({ isAddEditMovieModalVisible: true });
+        this.setState({ isAddEditMovieModalVisible: true, isEditMovieView: false });
     }
 
     handleAddModalClose() {
@@ -134,7 +149,7 @@ class MovieListPage extends PureComponent {
     }
 
     render() {
-        const { data, totalCount, page, limit, isLoadingMovies, sort, genreList, isAddEditMovieModalVisible } = this.state;
+        const { data, totalCount, page, limit, isLoadingMovies, sort, genreList, isAddEditMovieModalVisible, isEditMovieView, allGenreList } = this.state;
         const { isAdminRoute } = this.props;
         return <Layout className="movie-layout">
             <Header />
@@ -153,7 +168,7 @@ class MovieListPage extends PureComponent {
                         </Row>
                         <Row className="search-action">
                             <Col>
-                                <MovieGenreTagSelect selectedTags={genreList} onChange={this.onGenreTagChange} />
+                                <MovieGenreTagSelect allGenreList={allGenreList} selectedTags={genreList} onChange={this.onGenreTagChange} />
                             </Col>
                         </Row>
                         {
@@ -162,7 +177,12 @@ class MovieListPage extends PureComponent {
                                     <Button onClick={this.openAddMovieModal} type="primary" icon={<PlusOutlined />}>
                                         Add Movie
                                     </Button>
-                                    <AddEditMovieModal visible={isAddEditMovieModalVisible} handleCancel={this.closeAddMovieModal} />
+                                    <AddEditMovieModal
+                                        isEditMovieView={isEditMovieView}
+                                        visible={isAddEditMovieModalVisible}
+                                        handleCancel={this.closeAddMovieModal}
+                                        allGenreList={allGenreList}
+                                    />
                                 </Col>
                             </Row>
                         }

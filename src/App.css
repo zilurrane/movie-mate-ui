@@ -1,5 +1,8 @@
 @import '~antd/dist/antd.css';
 
+.width-100 {
+  width: 100%;
+}
 .header {
   background-color: #555;
   display: flex;
