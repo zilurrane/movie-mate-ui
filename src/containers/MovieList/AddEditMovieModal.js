@@ -65,7 +65,7 @@ const AddEditMovieModal = ({ isEditMovieView, visible, handleOk, handleCancel, a
                 <InputNumber className="width-100" min={0} max={99} step={1} precision={0} />
             </Form.Item>
             <Form.Item
-                name="imdb_score"
+                name="imdbScore"
                 label="IMDB Score"
                 rules={[{ required: true, message: 'Please input the IMDB score!' }]}
             >

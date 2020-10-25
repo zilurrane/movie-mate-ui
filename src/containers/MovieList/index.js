@@ -139,7 +139,7 @@ class MovieListPage extends PureComponent {
                     genre: values.genre,
                     popularity99: values.popularity99,
                     director: values.director,
-                    imdb_score: values.imdb_score
+                    imdbScore: values.imdbScore
                 }
                 editMovie(selectedMovie._id, updateRequest).then(async response => {
                     if (response.ok) {

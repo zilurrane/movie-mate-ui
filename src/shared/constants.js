@@ -20,10 +20,10 @@ export const SORT_OPTIONS = [
         value: 'name-desc',
         label: 'Movie Name - Z to A'
     }, {
-        value: 'imdb_score-desc',
+        value: 'imdbScore-desc',
         label: 'IMDB Rating - High to Low'
     }, {
-        value: 'imdb_score-asc',
+        value: 'imdbScore-asc',
         label: 'IMDB Rating - Low to High'
     }
 ]

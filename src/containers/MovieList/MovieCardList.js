@@ -31,7 +31,7 @@ const MovieCardList = ({ isAdminRoute, data, isLoadingMovies, onMovieDelete, onM
                     </div>
                     <div className="movie-meta">
                         <b>IMDB Rating: </b>
-                        {item.imdb_score}
+                        {item.imdbScore}
                     </div>
                     <div className="movie-meta">
                         <b>Popularity: </b>
